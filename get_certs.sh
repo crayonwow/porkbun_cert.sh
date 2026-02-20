@@ -19,11 +19,9 @@ if [ $(jq .status res | sed -e "s/^\"//" -e "s/\"$//") != "SUCCESS" ]; then
   exit 1
 fi
 
-pk=$(jq .publickey res | sed -e "s/^\"//" -e "s/\"$//")
-sk=$(jq .privatekey res | sed -e "s/^\"//" -e "s/\"$//")
-
-echo $pk >pub.cert
-echo $sk >private.cert
+pk=$(jq .publickey res | xargs printf "%b" >pub.cert)
+sk=$(jq .privatekey res | xargs printf "%b" >private.cert)
+fc=$(jq .certificatechain res | xargs printf "%b" >chain.cert)
 
 rm res
 echo "✅Successfyly got certs!!!!"
